@@ -1,0 +1,57 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: wopr
+  labels:
+    app: wopr
+spec:
+  selector:
+    app: wopr
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  type: NodePort
+  externalTrafficPolicy: Cluster
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: wopr
+  labels:
+    app: wopr
+data:
+  application.properties: |+
+    message.text=Let's play Global Thermonuclear War.
+    message.source=config/application.properties
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wopr
+  labels:
+    app: wopr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wopr
+  template:
+    metadata:
+      labels:
+        app: wopr
+    spec:
+      containers:
+      - name: wopr
+        image: wopr:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: wopr
