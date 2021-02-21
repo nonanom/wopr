@@ -1,4 +1,6 @@
 # wopr
+Updating this 
+
 This project demonstrates using:
 * `Spring Boot` to create an app named `wopr` that uses an external `config file` or `env vars` to display a message in your browser. The app will run a webserver that is accessible on `localhost:8080` and that displays some text defined in an `application.properties` config file. The app currently consists of a single service defined as a `container` and deployed to `kubernetes` that displays a message.
 * `Docker` to create a `Docker container image` using a `Dockerfile` to containerize the app.
