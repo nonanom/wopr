@@ -10,12 +10,9 @@ public class DisplayMessageController {
   @Value("${message.text}")
   private String messageText;
 
-  @Value("${message.source}")
-  private String messageSource;
-
   @RequestMapping("/")
   private String getHome() {
-    return ("message.text: " + messageText + "<br/>" + "message.source: " + messageSource);
+    return (messageText);
   }
 
 }
