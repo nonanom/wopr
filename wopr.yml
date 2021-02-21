@@ -23,7 +23,6 @@ metadata:
 data:
   application.properties: |+
     message.text=Let's play Global Thermonuclear War.
-    message.source=config/application.properties
 ---
 apiVersion: apps/v1
 kind: Deployment
