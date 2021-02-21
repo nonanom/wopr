@@ -11,16 +11,17 @@ This is an example application that I wrote to teach my teammates how to run a J
 * [Minikube](https://minikube.sigs.k8s.io/) >= 1.17.1
 
 ## Usage
-### Build the .jar file
+### Build and run the .jar file
 ```
 git clone
 gradle build
 java -jar build/libs/wopr.jar
+java -jar build/libs/wopr.jar --spring.config.location=some-other-application.properties
 http://localhost:8080/
 http://localhost:8080/actuator/health
 ```
 
-### Build the docker container image
+### Build and run the Docker container image
 ```
 docker build . --tag wopr:latest
 docker run -p 8080:8080 wopr:latest
@@ -40,10 +41,3 @@ kubectl create -f wopr.yml
 minikube service wopr
 ```
 
-## application.properties
-You can specify a different application.properties file at runtime:
-
-```
-java -jar build/libs/wopr.jar --spring.config.location=some-other-application.properties
-```
-## 
