@@ -1,0 +1,54 @@
+# This is a collection of 3 Kubernetes manifests expressed as 3 separate yaml documents included in the same yaml file with new documents indicated by the --- yaml syntax.
+# Typically, these documents are stored and versioned as separate files such as service.yaml, configmap.yaml, deployment.yaml. For educational purposes, they appear together.
+kind: Service
+apiVersion: v1
+metadata:
+  name: wopr
+  labels:
+    app: wopr
+spec:
+  selector:
+    app: wopr
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  type: NodePort
+  externalTrafficPolicy: Cluster
+---
+# This ConfigMap defines environment variables. The envvars are injected into Pods using the Deployment envFrom directive.
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: wopr
+  labels:
+    app: wopr
+data:
+  message.text: Let's play Global Thermonuclear War. We'll use environment variables.
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wopr
+  labels:
+    app: wopr
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wopr
+  template:
+    metadata:
+      labels:
+        app: wopr
+    spec:
+      containers:
+      - name: wopr
+        image: wopr:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: wopr
