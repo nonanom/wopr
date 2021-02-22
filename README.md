@@ -16,15 +16,30 @@ This is an example application that I wrote to teach my teammates how to run a J
 git clone
 gradle build
 java -jar build/libs/wopr.jar
-java -jar build/libs/wopr.jar --spring.config.location=some-other-application.properties
 http://localhost:8080/
 http://localhost:8080/actuator/health
+```
+
+#### Take a look at how externalized config works
+```
+java -jar build/libs/wopr.jar --spring.config.location=/path/to/some/other/application.properties
+
+java -jar -Dmessage.text="This is one way to do it." build/libs/wopr.jar
+
+java -jar -Dspring.application.json='{"message.text":"This is a different way to do it."}' build/libs/wopr.jar
 ```
 
 ### Build and run the Docker container image
 ```
 docker build . --tag wopr:latest
 docker run -p 8080:8080 wopr:latest
+```
+
+#### Take a look at how externalized config works
+```
+docker run -p 8080:8080 -e message.text="More ways." wopr:latest
+
+docker run -p 8080:8080 -e spring.application.json='{"message.text":"This is a valid way to do it."}'  wopr:latest
 ```
 
 ### Start the cluster
@@ -37,7 +52,14 @@ minikube dashboard
 
 ### Deploy the service, deployment, and configmap manifests to the cluster
 ```
-kubectl create -f wopr.yml
-minikube service wopr
+kubectl create namespace example1
+kubectl create -f wopr-example1-envvars.yaml  --namespace=example1
+minikube service wopr --namespace example1
+
+kubectl create namespace example2
+kubectl create -f wopr-example2-applicationproperties.yaml --namespace=example2
+minikube service wopr --namespace example2
+
+kubectl delete namespaces example1 example2
 ```
 
